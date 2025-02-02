@@ -6,7 +6,7 @@ public class JDBC {
 	
 	
 	
-	public static ReturnClass chekLogin( String email,String password) {
+	public static ReturnedUser chekLogin( String email,String password) {
         String url = "jdbc:mysql://localhost:3306/workTen";
         String user = "root";
         String pass = "admin@12345";
@@ -26,18 +26,18 @@ public class JDBC {
                     String name = response.getString("name");
                     String dbPassword = response.getString("password");
                     Users newUser = new Users(id,name,email,password); 
-                    System.out.println(password);
-                    System.out.println(dbPassword);
+//                    System.out.println(password);
+//                    System.out.println(dbPassword);
                     if(dbPassword.equals(password)) {
-                    	return new ReturnClass(true,"Loggin Succesfull",newUser);
+                    	return new ReturnedUser(true,"Loggin Succesfull",newUser);
                     }else {
-                    	return new ReturnClass(false,"Incorrect password for user "+email,newUser);
+                    	return new ReturnedUser(false,"Incorrect password for user "+email,newUser);
                     }                    
 
                    
                 }else {
                 	
-                	return new ReturnClass(false,"No User found with the provided credentials",null);
+                	return new ReturnedUser(false,"No User found with the provided credentials",null);
                 }
                 
                 
@@ -49,14 +49,14 @@ public class JDBC {
         }
 	
 	
-	public static ReturnClass registerUser(String name, String email, String password) {
+	public static ReturnedUser registerUser(String name, String email, String password) {
         String url = "jdbc:mysql://localhost:3306/workTen";
         String user = "root";
         String pass = "admin@12345";
         
  
         
-        ReturnClass response = validEmail(email, url, user, pass);
+        ReturnedUser response = validEmail(email, url, user, pass);
         if(response.success==true) {
         	String query = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
             
@@ -75,8 +75,8 @@ public class JDBC {
                     try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                         if (generatedKeys.next()) {
                             int generatedId = generatedKeys.getInt(1);
-                            Users registeredUser = new Users(generatedId,name,email,pass);
-                            return new ReturnClass(true,"User Created Succesfully",registeredUser);
+                            Users registeredUser = new Users(generatedId,name,email,password);
+                            return new ReturnedUser(true,"User Created Succesfully",registeredUser);
                         }
                     }
                 }
@@ -87,12 +87,12 @@ public class JDBC {
                 return null;
             }
         }else {
-        	return new ReturnClass(false,"User with this email already exist",response.user);
+        	return new ReturnedUser(false,"User with this email already exist",response.user);
         	
         }
     }
 
-    public static ReturnClass validEmail(String email, String url, String user, String pass) {
+    public static ReturnedUser validEmail(String email, String url, String user, String pass) {
         String query = "SELECT * FROM users WHERE email = ?";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
@@ -109,14 +109,14 @@ public class JDBC {
                 String password = resultSet.getString("password");
 
                 Users existingUser = new Users(id, name, existingEmail, password);
-                return new ReturnClass(false, "User with the email"+existingUser.email+ "already exists", existingUser);
+                return new ReturnedUser(false, "User with the email"+existingUser.email+ "already exists", existingUser);
             } else {
-                return new ReturnClass(true, "User does not exist", null);
+                return new ReturnedUser(true, "User does not exist", null);
             }
             
         } catch (SQLException exception) {
             System.out.println(exception);
-            return new ReturnClass(false, "Server-side exception occurred", null);
+            return new ReturnedUser(false, "Server-side exception occurred", null);
         }
     }
 

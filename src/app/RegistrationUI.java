@@ -4,8 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class RegistrationUI {
 
@@ -93,19 +92,18 @@ public class RegistrationUI {
                 }
 
               
-                System.out.println("Registered User Details:");
-                System.out.println("Name: " + name);
-                System.out.println("Email: " + email);
-                System.out.println("Password: " + password);
+//                System.out.println("Registered User Details:");
+//                System.out.println("Name: " + name);
+//                System.out.println("Email: " + email);
+//                System.out.println("Password: " + password);
                 
-                ReturnClass response = JDBC.registerUser(name, email,password);
+                ReturnedUser response = JDBC.registerUser(name, email,password);
                 if(response.success==true) {
-                	JOptionPane.showMessageDialog(frame, response.msg, "Success", JOptionPane.INFORMATION_MESSAGE);
+                	JOptionPane.showMessageDialog(frame, response.msg+": "+response.user.getEmail(), "Success", JOptionPane.INFORMATION_MESSAGE);
                 	new LoginUI();
                 	frame.dispose();
                 	
                 }else {
-
                 	JOptionPane.showMessageDialog(frame, response.msg, "Error", JOptionPane.ERROR_MESSAGE);
                 	nameField.setText("");
                 	emailField.setText("");

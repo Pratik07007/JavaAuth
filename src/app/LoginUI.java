@@ -41,7 +41,7 @@ class LoginUI {
 				String email = emailField.getText();
 				String password = new String(passwordField.getPassword());
 
-				ReturnClass response = JDBC.chekLogin(email, password);
+				ReturnedUser response = JDBC.chekLogin(email, password);
 				if (response.success == true) {
 					JOptionPane.showMessageDialog(loginFrame, response.msg, "Success", JOptionPane.INFORMATION_MESSAGE);
 					loginFrame.dispose();

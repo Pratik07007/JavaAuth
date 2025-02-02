@@ -4,12 +4,14 @@ public class Users {
 	int id;
     String name;
     String email;
+    String pass;
    
 
-    public Users(int id, String name, String email, String password) {
+    public Users(int id, String name, String email, String pass) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.pass=pass;
         
     }
 
